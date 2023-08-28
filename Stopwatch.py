@@ -1,6 +1,6 @@
 import time
 import threading
-from Layer import Grid
+from Layout import Grid
 from PIL import Image, ImageTk
 from tkinter import Label, TclError
 
