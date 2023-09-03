@@ -1,4 +1,4 @@
-from Stopwatch import Clock
+from Files.Stopwatch import Clock
 from tkinter import TclError
 
 window = Clock()

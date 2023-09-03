@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, PhotoImage
+from tkinter import Tk, Frame
 
 
 class Grid:
@@ -7,7 +7,6 @@ class Grid:
         self.root = Tk()
         self.root.configure(bg='#222222')
         self.root.title('⏱ Stopwatch By Naim')
-        self.root.iconphoto(True, PhotoImage('/home/naim/PycharmProjects/Images/Stopwatch_64.ico'))
 
         # Set window Geometry
         self.root.geometry("880x350")

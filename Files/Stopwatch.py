@@ -1,9 +1,9 @@
 import time
 import threading
 from os import path
-from Layout import Grid
+from Files.Layout import Grid
 from PIL import Image, ImageTk
-from tkinter import Label, Toplevel, TclError, Button
+from tkinter import Label, Toplevel, TclError, Button, PhotoImage
 
 
 def plus_zero(y):
@@ -13,15 +13,16 @@ def plus_zero(y):
 class Clock(Grid):
     def __init__(self):
         super().__init__()
+        self.root.iconphoto(True, PhotoImage(path.join('Files', 'Images', 'Stopwatch_64.ico')))
 
         self.font_1 = ("Arial", 150)
         self.font_2 = ("Arial", 50)
         self.font_3 = ("Courier", 30)
 
-        play_image = Image.open(path.join('Images', 'Play.ico')).resize((100, 100))
-        pause_image = Image.open(path.join('Images', 'Pause.ico')).resize((100, 100))
-        reset_image = Image.open(path.join('Images', 'Reset.ico')).resize((100, 100))
-        bookmark_image = Image.open(path.join('Images', 'Bookmark.ico')).resize((100, 100))
+        play_image = Image.open(path.join('Files', 'Images', 'Play.ico')).resize((100, 100))
+        pause_image = Image.open(path.join('Files', 'Images', 'Pause.ico')).resize((100, 100))
+        reset_image = Image.open(path.join('Files', 'Images', 'Reset.ico')).resize((100, 100))
+        bookmark_image = Image.open(path.join('Files', 'Images', 'Bookmark.ico')).resize((100, 100))
         self.play_image = ImageTk.PhotoImage(play_image)
         self.pause_image = ImageTk.PhotoImage(pause_image)
         self.reset_image = ImageTk.PhotoImage(reset_image)
