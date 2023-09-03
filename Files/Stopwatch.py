@@ -13,7 +13,9 @@ def plus_zero(y):
 class Clock(Grid):
     def __init__(self):
         super().__init__()
-        self.root.iconphoto(True, PhotoImage(path.join('Files', 'Images', 'Stopwatch_64.ico')))
+
+        # This line of code may not work in windows
+        # self.root.iconphoto(True, PhotoImage(path.abspath(path.join('Files', 'Images', 'Stopwatch_64.ico'))))
 
         self.font_1 = ("Arial", 150)
         self.font_2 = ("Arial", 50)
