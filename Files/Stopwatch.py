@@ -125,9 +125,14 @@ class Clock(Grid):
         try:
             self.pop.destroy()
             self.pop = None
+        except AttributeError:
+            pass
+
+        try:
             self.stop_event.set()
         except AttributeError:
             pass
+
         e.widget.config(relief="sunken")
 
         def event():
