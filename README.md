@@ -1,11 +1,10 @@
 # Stopwatch
-[ A Python GUI(tkinter) Stopwatch ]<br>
-Run main.py<br>
-requirements.txt containing the list of external packages
+[ A Python GUI(tkinter) Stopwatch ]
+<br>
+Run Setup.py once (This will adjust GUI settings according to your screen)
+<br>
+Form now, you can only run main.py unless you modify your screen's scale/resolution (If you do, run Setup.py once again)
 <br><br>
-Note: If your screen scale is 125% or more, this gui may appear bigger (100% is recommended). I'll try to fix it later 😇.
-
-
+requirements.txt containing the list of external packages
 <br><br><br><br>
-Button Image:
-<a href="http://www.freepik.com">Designed by Yurlick / Freepik</a>
+Button Image: <a href="http://www.freepik.com">Designed by Yurlick / Freepik</a>

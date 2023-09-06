@@ -1,9 +1,9 @@
 import time
 import threading
 from os import path
-from Files.Layout import Grid
 from PIL import Image, ImageTk
-from tkinter import Label, Toplevel, TclError, Button, PhotoImage
+from tkinter import Label, Toplevel, TclError, Button
+from Files.Layout import Grid, refactor_font, refactor_window
 
 
 def plus_zero(y):
@@ -14,17 +14,15 @@ class Clock(Grid):
     def __init__(self):
         super().__init__()
 
-        # This line of code may not work in windows
-        # self.root.iconphoto(True, PhotoImage(path.abspath(path.join('Files', 'Images', 'Stopwatch_64.ico'))))
+        self.font_1 = ("Arial", refactor_font(150))
+        self.font_2 = ("Arial", refactor_font(50))
+        self.font_3 = ("Courier", refactor_font(30))
 
-        self.font_1 = ("Arial", 150)
-        self.font_2 = ("Arial", 50)
-        self.font_3 = ("Courier", 30)
-
-        play_image = Image.open(path.join('Files', 'Images', 'Play.ico')).resize((100, 100))
-        pause_image = Image.open(path.join('Files', 'Images', 'Pause.ico')).resize((100, 100))
-        reset_image = Image.open(path.join('Files', 'Images', 'Reset.ico')).resize((100, 100))
-        bookmark_image = Image.open(path.join('Files', 'Images', 'Bookmark.ico')).resize((100, 100))
+        image_size = refactor_window(100)
+        play_image = Image.open(path.join('Files', 'Images', 'Play.ico')).resize((image_size, image_size))
+        pause_image = Image.open(path.join('Files', 'Images', 'Pause.ico')).resize((image_size, image_size))
+        reset_image = Image.open(path.join('Files', 'Images', 'Reset.ico')).resize((image_size, image_size))
+        bookmark_image = Image.open(path.join('Files', 'Images', 'Bookmark.ico')).resize((image_size, image_size))
         self.play_image = ImageTk.PhotoImage(play_image)
         self.pause_image = ImageTk.PhotoImage(pause_image)
         self.reset_image = ImageTk.PhotoImage(reset_image)
@@ -147,7 +145,7 @@ class Clock(Grid):
             self.pop, self.toplevel = Toplevel(self.root), False
             # self.pop.attributes("-topmost", True)
             self.pop.transient(self.root)
-            self.pop.geometry('+40+100')
+            self.pop.geometry(f'+{refactor_window(40)}+{refactor_window(100)}')
             self.pop.config(bg='silver')
             self.pop.resizable(width=False, height=False)
             self.pop.title('Naim')
@@ -174,6 +172,7 @@ class Clock(Grid):
         self.pop.lift()
         try:
             self.pop_label.config(text='\n'.join(self.bookmark_text))
+            self.pop.wm_geometry("")
         except (AttributeError, TclError):
             Label(self.pop, text=' Bookmarks ', bg='#DDEEDD', fg='#000000', font=self.font_3).pack(padx=10, pady=10)
             self.pop_label = Label(self.pop, text='\n'.join(self.bookmark_text), bg='silver', fg='#222222',

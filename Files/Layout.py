@@ -1,17 +1,33 @@
+from os import path, getcwd
 from tkinter import Tk, Frame
+from Files.Settings import scale_refactor, display_refactor
+try:
+    from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(1)
+except Exception:
+    pass
+
+
+def refactor_font(n):
+    return int(scale_refactor * n)
+
+
+def refactor_window(n):
+    return int(display_refactor * n)
 
 
 class Grid:
     def __init__(self):
         # Basic window configuration
         self.root = Tk()
+        # self.root.iconbitmap(path.join(getcwd(), 'Files', 'Images', 'Stopwatch_64.ico'))
         self.root.configure(bg='#222222')
         self.root.title('⏱ Stopwatch By Naim')
 
         # Set window Geometry
-        self.root.geometry("880x350")
-        self.root.minsize(335, 235)
-        # self.root.maxsize(1200, 600)
+        self.root.geometry(f'{refactor_window(900)}x{refactor_window(360)}')
+        self.root.minsize(refactor_window(335), refactor_window(235))
+        # self.root.maxsize(refactor_window(1200), refactor_window(600))
 
         # Call class methods to build the layout
         self.main_grid()
