@@ -1,8 +1,19 @@
-# Stopwatch
-[ A Python GUI(tkinter) Stopwatch ]
-<br>
-Run main.py (This will adjust GUI settings according to your screen then start the clock)
-<br><br><b>
-requirements.txt containing the list of external packages (Can be installed using <i>"pip install -r requirements.txt"</i>)
-</b><br><br><br><br>
+# A Python GUI(tkinter) Stopwatch
+[Note: No AI tools used]
+
+Run the project:
+```
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+venv\Scripts\activate       # For windows
+source venv/bin/activate    # For MacOS / Linux
+
+# Install requirements
+pip install -r requirements.txt"
+
+# Start the main
+python main.py
+```
 Button Image: <a href="http://www.freepik.com">Designed by Yurlick / Freepik</a>
