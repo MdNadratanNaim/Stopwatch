@@ -1,3 +1,5 @@
+# Run Setup.py first to create Settings.py
+import Files.Setup
 from Files.Stopwatch import Clock, refactor_font, TclError, refactor_window
 
 window = Clock()

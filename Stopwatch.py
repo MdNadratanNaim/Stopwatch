@@ -1,9 +1,124 @@
+###############################################################################################################
+#                                           Imports
+###############################################################################################################
+
+
+import sys
 import time
 import threading
 from os import path
 from PIL import Image, ImageTk
-from tkinter import Label, Toplevel, TclError, Button
-from Files.Layout import Grid, refactor_font, refactor_window, base_path, files
+from tkinter import Tk, Button, Label, Frame, Toplevel, TclError
+try:
+    from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(1)
+except Exception:
+    pass
+
+
+###############################################################################################################
+#                                   Analyze Screen for GUI
+###############################################################################################################
+
+
+root = Tk()
+root.config(bg='#222222')
+root.title('Setup')
+Label(root, text='Naim', fg='#FFFFFF', bg='#222222', font=('Courier', 100), anchor='se').pack(padx=10, pady=10)
+scale_refactor, display_refactor = 1, 1
+
+
+def scale():
+    global scale_refactor, display_refactor
+
+    # Base = 344 x 158
+    window_w = root.winfo_width()
+    # Base = 1920 x 1080
+    display_w = root.winfo_screenwidth()
+
+    # Generate GUI refactoring values
+    scale_refactor = (344 / window_w) * (display_w / 1920)
+    display_refactor = display_w / 1920
+
+    # Destroy after completion
+    root.destroy()
+
+
+root.after(200, scale)
+root.mainloop()
+
+
+###############################################################################################################
+#                                           Gather Info
+###############################################################################################################
+
+
+# Getting base path
+if getattr(sys, 'frozen', False):
+    base_path, exe, files = sys._MEIPASS, True, 'Files'
+else:
+    base_path, exe, files = path.dirname(path.abspath(__file__)), False, 'Files'
+
+
+# Get font refactor
+def refactor_font(n):
+    return int(scale_refactor * n)
+
+
+# Get window refactor
+def refactor_window(n):
+    return int(display_refactor * n)
+
+
+###############################################################################################################
+#                                       Create Layout for GUI
+###############################################################################################################
+
+
+class Grid:
+    def __init__(self):
+        # Basic window configuration
+        self.root = Tk()
+        # self.root.iconbitmap(path.join(getcwd(), 'Files', 'Images', 'Stopwatch_64.ico'))
+        self.root.configure(bg='#222222')
+        self.root.title('⏱ Stopwatch By Naim')
+
+        # Set window Geometry
+        self.root.geometry(f'{refactor_window(900)}x{refactor_window(360)}')
+        self.root.minsize(refactor_window(335), refactor_window(235))
+        # self.root.maxsize(refactor_window(1200), refactor_window(600))
+
+        # Call class methods to build the layout
+        self.main_grid()
+        self.subgrid_controls()
+
+    # Divide the whole screen to place objects
+    def main_grid(self):
+        for row in range(11):
+            self.root.rowconfigure(row, weight=1)
+
+            for column in range(8):
+                self.root.columnconfigure(column, weight=1)
+                self.frame_grid = Frame(self.root, borderwidth=0, relief="solid", bg='#222222')
+                self.frame_grid.grid(row=row, column=column, sticky="nsew")
+
+    # Divide a cell to fit control buttons
+    def subgrid_controls(self):
+        self.control_frame = Frame(self.root, borderwidth=0, relief="solid", bg='#222222')
+        self.control_frame.grid(row=5, column=3, sticky="nsew")
+
+        for row in range(1):
+            self.control_frame.rowconfigure(0, weight=1)
+
+            for column in range(10):
+                self.control_frame.columnconfigure(column, weight=1)
+                self.frame2 = Frame(self.control_frame, borderwidth=0, relief="solid", bg='#222222')
+                self.frame2.grid(row=row, column=column, sticky="nsew")
+
+
+###############################################################################################################
+#                                       Create Stopwatch Logic
+###############################################################################################################
 
 
 def plus_zero(y):
@@ -138,7 +253,7 @@ class Clock(Grid):
             self.controls()
         self.root.after(100, event)
 
-    # Show popup form bookmark
+    # Show popup for bookmark
     def bookmark(self, e):
         # Create popup window
         if not self.pop:
@@ -179,3 +294,57 @@ class Clock(Grid):
                                    font=self.font_3)
             self.pop_label.pack(padx=10, pady=10)
             self.pop_button.pack()
+
+
+###############################################################################################################
+#                                               Format GUI
+###############################################################################################################
+
+
+window = Clock()
+
+
+# Destroy popup when needed
+def destroy():
+    window.pop.destroy()
+    window.pop = None
+
+
+def configuration_for_smaller_windows():
+    w = window.root.winfo_width()
+    h = window.root.winfo_height()
+
+    # Decrease font size for smaller windows
+    if w < refactor_window(900) or h < refactor_window(350):
+        if w < refactor_window(665) or h < refactor_window(260):
+            window.show_clock.config(font=("Arial", refactor_font(100)))
+            window.show_milli.config(font=("Arial", refactor_font(30)))
+        elif w < refactor_window(750) or h < refactor_window(280):
+            window.show_clock.config(font=("Arial", refactor_font(115)))
+            window.show_milli.config(font=("Arial", refactor_font(35)))
+        elif w < refactor_window(820) or h < refactor_window(300):
+            window.show_clock.config(font=("Arial", refactor_font(130)))
+            window.show_milli.config(font=("Arial", refactor_font(40)))
+        else:
+            window.show_clock.config(font=("Arial", refactor_font(140)))
+            window.show_milli.config(font=("Arial", refactor_font(45)))
+    else:
+        window.show_clock.config(font=("Arial", refactor_font(150)))
+        window.show_milli.config(font=("Arial", refactor_font(50)))
+
+    # Hide millisecond and Hour for smaller window
+    try:
+        window.show_milli.grid_forget() if w < refactor_window(410) else window.show_milli.grid(row=4, column=4, sticky="w")
+        window.show_clock.config(text=window.text1[3::]) if w < refactor_window(600) else window.show_clock.config(text=window.text1)
+    except (AttributeError, TclError):
+        pass
+
+    # Handle situation when popup window is closed
+    if window.pop:
+        window.pop.protocol("WM_DELETE_WINDOW", destroy)
+
+    window.root.after(100, configuration_for_smaller_windows)
+
+
+window.root.after(100, configuration_for_smaller_windows)
+window.root.mainloop()

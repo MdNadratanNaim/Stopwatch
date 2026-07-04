@@ -1,11 +1,23 @@
-from os import path, getcwd
+import sys
+import json
+from os import path
 from tkinter import Tk, Frame
-from Files.Settings import scale_refactor, display_refactor
 try:
     from ctypes import windll
     windll.shcore.SetProcessDpiAwareness(1)
 except Exception:
     pass
+
+
+# Reading Settings.json file
+if getattr(sys, 'frozen', False):
+    base_path, exe, files = sys._MEIPASS, True, 'Files'
+else:
+    base_path, exe, files = path.dirname(path.abspath(__file__)), False, ''
+with open(path.join(base_path, files, 'Settings.json'), 'r') as f:
+    settings = json.load(f)
+scale_refactor = float(settings['scale_refactor'])
+display_refactor = float(settings['display_refactor'])
 
 
 def refactor_font(n):
